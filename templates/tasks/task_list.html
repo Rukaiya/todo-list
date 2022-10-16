@@ -1,3 +1,6 @@
+{% extends 'tasks/main.html' %}
+{% block content %}
+
 {% if request.user.is_authenticated %}
     <p>{{request.user}}</p>
     <a href="{% url 'logout' %}">Logout</a>
@@ -27,3 +30,5 @@
     <h3>No task in list</h3>
     {% endfor %}
 </table>
+
+{% endblock content %}
