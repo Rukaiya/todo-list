@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
@@ -33,6 +34,11 @@ class RegisterView(FormView):
             login(self.request, user)
         return super(RegisterView, self).form_valid(form)
 
+    def get(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('tasks')
+        return super(RegisterView, self).get(*args, **kwargs)
+
 
 class TaskList(LoginRequiredMixin, ListView):
     model = Task
@@ -42,6 +48,13 @@ class TaskList(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['task_list'] = context['task_list'].filter(user=self.request.user)
         context['count'] = context['task_list'].filter(complete=False).count()
+
+        search_input = self.request.GET.get('search-area') or ''
+        if search_input:
+            context['task_list'] = context['task_list'].filter(
+                title__startswith=search_input
+            )
+        context['search_input'] = search_input
         return context
 
 

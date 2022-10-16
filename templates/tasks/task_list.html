@@ -6,6 +6,10 @@
 {% endif %}
 <h1>Tasks To DoList</h1>
 <a href="{% url 'task-create' %}">+ Add Task</a>
+<form method="get">
+    <input type="text" name="search-area" value="{{search_input}}">
+    <input type="submit" value="Search">
+</form>
 <table>
     <tr>
         <th>Title</th>
